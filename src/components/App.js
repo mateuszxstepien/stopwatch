@@ -12,11 +12,13 @@ class App extends Component {
 
   handleClickStart = () => {
     if (this.state.active === false) {
+      this.setState({
+        active: true,
+      });
       this.interval = setInterval(
         () =>
           this.setState({
             type: this.state.type + 1,
-            active: true,
           }),
         10
       );
@@ -24,20 +26,19 @@ class App extends Component {
   };
 
   handleClickStop = () => {
-    if (this.state.active === true) {
-      clearInterval(this.interval);
-      this.setState({
-        active: false,
-      });
-    }
+    clearInterval(this.interval);
+    this.setState({
+      active: false,
+    });
   };
 
-  handleClikcReset = () => {
+  handleClickReset = () => {
     clearInterval(this.interval);
     this.setState({
       type: 0,
       seconds: 0,
       minutes: 0,
+      active: false,
     });
   };
 
@@ -48,13 +49,15 @@ class App extends Component {
           {this.state.minutes > 59
             ? this.setState({
                 minutes: 0,
+                seconds: 0,
+                type: 0,
               })
             : this.state.minutes}
           :
           {this.state.seconds > 59
             ? this.setState({
                 seconds: 0,
-                minutes: this.setState.minutes + 1,
+                minutes: this.state.minutes + 1,
               })
             : this.state.seconds}
           :
@@ -63,16 +66,13 @@ class App extends Component {
                 type: 0,
                 seconds: this.state.seconds + 1,
               })
-            : this.state.type < 10
-            ? `0${this.state.type}`
             : this.state.type}
         </h1>
         <SwitchButton name="Start" click={this.handleClickStart} />
         <SwitchButton name="Stop" click={this.handleClickStop} />
-        <SwitchButton name="Reset" click={this.handleClikcReset} />
+        <SwitchButton name="Reset" click={this.handleClickReset} />
       </>
     );
   }
 }
-
 export default App;
